@@ -9,7 +9,7 @@ Code Examples:
   {
     InternetManager testInternet = new InternetManager();
 
-    List<NetworkMember> members = GenerateNetworks();
+    List<NetworkMember> members = GenerateNetworks(); //you need to create a method for creating your network members
 
     testInternet.StartNetworkSimulation();
     foreach (NetworkMember net in members)
