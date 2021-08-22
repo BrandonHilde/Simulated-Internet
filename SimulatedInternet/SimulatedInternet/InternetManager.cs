@@ -88,17 +88,17 @@ namespace SimulatedInternet
         /// <summary>
         /// Generates a Fake ip to identify the Member in the network
         /// </summary>
-        /// <returns>A fake ip in string form</returns>
+        /// <returns>A fake ip in string form. Number ranges are changed to make the ip noticably fake.</returns>
         public string RegisterIP()
         {
             string value = string.Empty;
 
             for(int x = 0; x < 3; x++)
             {
-                value += random.Next(0, 256).ToString() + ".";
+                value += random.Next(256, 1000).ToString() + ".";
             }
 
-            return  value + random.Next(0, 256).ToString();
+            return  value + random.Next(256, 1000).ToString();
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace SimulatedInternet
 
             foreach (ConnectionDetail d in det)
             {
-                if (d.ConnectedMember == null) d.ConnectedMember = pack.member;
+                if (d.ConnectedMember == null) d.ConnectedMember = pack.Member;
             }
         }
 
@@ -167,7 +167,7 @@ namespace SimulatedInternet
 
             DetailPackage net =
                           Identities.Where(
-                              x => x.member.SimulationID == ID
+                              x => x.Member.SimulationID == ID
                           ).FirstOrDefault();
 
             return net;
@@ -197,7 +197,7 @@ namespace SimulatedInternet
                 Identities.Add(new DetailPackage
                 {
                     IP = RegisterIP(),
-                    member = member,
+                    Member = member,
                     locationX = random.Next(0, 700),
                     locationY = random.Next(0, 700)
                 });
@@ -228,7 +228,7 @@ namespace SimulatedInternet
             if (detail.IP == string.Empty) return false;
             if (detail.Member == null) return false;
             if (detail.ConnectedMember == null) return false;
-            if (detail.ping < 0) return false;
+            if (detail.Ping < 0) return false;
 
             return true;
         }
@@ -241,10 +241,10 @@ namespace SimulatedInternet
                 {
                     Messages.Add(new RawMessage
                     {
-                        member = member,
-                        raw = raw,
+                        Member = member,
+                        Raw = raw,
                         IP = IP,
-                        port = Port
+                        Port = Port
                     });
                 }
                 catch (Exception ex)
@@ -307,10 +307,10 @@ namespace SimulatedInternet
                                 Transit.Add(new ByteStorage
                                 {
                                     DestinationIP = IP,
-                                    bytes = raw,
+                                    Bytes = raw,
                                     OriginIP = pack.IP,
                                     Port = Port,
-                                    Ping = detail.ping,
+                                    Ping = detail.Ping,
                                     TimeStamp = DateTime.UtcNow
                                 });
                             }
@@ -327,7 +327,7 @@ namespace SimulatedInternet
                                     IP = pack.IP,
                                     Member = member,
                                     ConnectedMember = null,
-                                    ping = FakePing(pack, packDest)
+                                    Ping = FakePing(pack, packDest)
                                 });
                             }
                         }
@@ -355,9 +355,9 @@ namespace SimulatedInternet
                             raws.Add(new RawMessage
                             {
                                 IP = Messages[i].IP,
-                                member = Messages[i].member,
-                                port = Messages[i].port,
-                                raw = Messages[i].raw
+                                Member = Messages[i].Member,
+                                Port = Messages[i].Port,
+                                Raw = Messages[i].Raw
                             });
                         }
                     }
@@ -375,7 +375,7 @@ namespace SimulatedInternet
 
             foreach (RawMessage m in raws)
             {
-                SendBytes(m.member, m.raw, m.IP, m.port);
+                SendBytes(m.Member, m.Raw, m.IP, m.Port);
             }
 
             open = false;
@@ -404,11 +404,11 @@ namespace SimulatedInternet
                             {
                                 if (net.DestIP == bs.DestinationIP)
                                 {
-                                    net.ConnectedMember.DataListener(bs.bytes, bs.DestinationIP); // send to destination after checking connection details
+                                    net.ConnectedMember.DataListener(bs.Bytes, bs.DestinationIP); // send to destination after checking connection details
                                 }
                                 else
                                 {
-                                    net.Member.DataListener(bs.bytes, bs.OriginIP); // send to destination after checking connection details
+                                    net.Member.DataListener(bs.Bytes, bs.OriginIP); // send to destination after checking connection details
                                 }
 
                                 bs.Completed = true; // set the data as a completed message
@@ -439,16 +439,16 @@ namespace SimulatedInternet
         public string DestIP { get; set; }
         public NetworkMember Member { get; set; }
         public NetworkMember ConnectedMember { get; set; }
-        public int ping { get; set; }
+        public int Ping { get; set; }
     }
 
     // Stores raw data from a member and destination information
     public class RawMessage
     {
-        public NetworkMember member { get; set; }
-        public byte[] raw { get; set; }
+        public NetworkMember Member { get; set; }
+        public byte[] Raw { get; set; }
         public string IP { get; set; }
-        public ushort port { get; set; }
+        public ushort Port { get; set; }
     }
 
     // Stores raw data during transit while ping is being simulated
@@ -459,14 +459,14 @@ namespace SimulatedInternet
         public string OriginIP { get; set; }
         public int Port { get; set; }
         public int Ping { get; set; }
-        public byte[] bytes { get; set; }
+        public byte[] Bytes { get; set; }
         public bool Completed = false;
     }
 
     // Stores details about a members location and address
     public class DetailPackage
     {
-        public NetworkMember member { get; set; }
+        public NetworkMember Member { get; set; }
         public string IP { get; set; }
         public int locationX = 0;
         public int locationY = 0;
