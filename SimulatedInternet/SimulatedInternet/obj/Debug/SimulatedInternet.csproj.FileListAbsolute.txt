@@ -4,3 +4,9 @@ C:\Users\Brandon\source\SimulatedInternet\SimulatedInternet\obj\Debug\SimulatedI
 C:\Users\Brandon\source\SimulatedInternet\SimulatedInternet\obj\Debug\SimulatedInternet.csproj.CoreCompileInputs.cache
 C:\Users\Brandon\source\SimulatedInternet\SimulatedInternet\obj\Debug\SimulatedInternet.dll
 C:\Users\Brandon\source\SimulatedInternet\SimulatedInternet\obj\Debug\SimulatedInternet.pdb
+C:\Users\Brandon\Source\Repos\Simulated-Internet\SimulatedInternet\SimulatedInternet\bin\Debug\SimulatedInternet.dll
+C:\Users\Brandon\Source\Repos\Simulated-Internet\SimulatedInternet\SimulatedInternet\bin\Debug\SimulatedInternet.pdb
+C:\Users\Brandon\Source\Repos\Simulated-Internet\SimulatedInternet\SimulatedInternet\obj\Debug\SimulatedInternet.csprojAssemblyReference.cache
+C:\Users\Brandon\Source\Repos\Simulated-Internet\SimulatedInternet\SimulatedInternet\obj\Debug\SimulatedInternet.csproj.CoreCompileInputs.cache
+C:\Users\Brandon\Source\Repos\Simulated-Internet\SimulatedInternet\SimulatedInternet\obj\Debug\SimulatedInternet.dll
+C:\Users\Brandon\Source\Repos\Simulated-Internet\SimulatedInternet\SimulatedInternet\obj\Debug\SimulatedInternet.pdb
