@@ -164,7 +164,6 @@ namespace SimulatedInternet
         /// <returns></returns>
         public DetailPackage LookUpMember(string ID)
         {
-
             DetailPackage net =
                           Identities.Where(
                               x => x.Member.SimulationID == ID
@@ -404,7 +403,7 @@ namespace SimulatedInternet
                             {
                                 if (net.DestIP == bs.DestinationIP)
                                 {
-                                    net.ConnectedMember.DataListener(bs.Bytes, bs.DestinationIP); // send to destination after checking connection details
+                                    net.ConnectedMember.DataListener(bs.Bytes, bs.OriginIP); // send to destination after checking connection details
                                 }
                                 else
                                 {
@@ -441,8 +440,9 @@ namespace SimulatedInternet
         public NetworkMember ConnectedMember { get; set; }
         public int Ping { get; set; }
     }
-
-    // Stores raw data from a member and destination information
+    /// <summary>
+    /// Stores raw data from a member and destination information
+    /// </summary>
     public class RawMessage
     {
         public NetworkMember Member { get; set; }
@@ -450,8 +450,9 @@ namespace SimulatedInternet
         public string IP { get; set; }
         public ushort Port { get; set; }
     }
-
-    // Stores raw data during transit while ping is being simulated
+    /// <summary>
+    ///  Stores raw data during transit while ping is being simulated
+    /// </summary>
     public class ByteStorage
     {
         public DateTime TimeStamp { get; set; }
@@ -462,8 +463,9 @@ namespace SimulatedInternet
         public byte[] Bytes { get; set; }
         public bool Completed = false;
     }
-
-    // Stores details about a members location and address
+    /// <summary>
+    /// Stores details about a members location and address
+    /// </summary>
     public class DetailPackage
     {
         public NetworkMember Member { get; set; }
