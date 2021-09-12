@@ -379,9 +379,7 @@ namespace SimulatedInternet
 
             open = false;
 
-            List<ByteStorage> finished = Transit.Where(x => x.Completed).ToList();  //gets list of already sent data
-
-            foreach (ByteStorage b in finished) Transit.Remove(b); // remove already sent data
+            Transit.RemoveAll(x => x.Completed);  // remove all completed 
 
             List<ByteStorage> complete = Transit.Where // gets list of data that ping time has been completed
                 (
