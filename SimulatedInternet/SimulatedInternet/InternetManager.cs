@@ -3,34 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Collections.Concurrent;
 
 namespace SimulatedInternet
 {
-    /// <summary>
-    /// This class manages the network connection to a Member
-    /// </summary>
-    public class NetworkMember
-    {
-        /// <summary>
-        /// Used to send data to the simulated internet
-        /// </summary>
-        public InternetManager NetManager { get; set; }
-        /// <summary>
-        /// Identifies the Member to the simulated internet
-        /// </summary>
-        public string SimulationID { get; set; }
-
-        /// <summary>
-        /// Used to recieve both simulated data and network data
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="SourceIP"></param>
-        public virtual void DataListener(byte[] data, string SourceIP)
-        {
-
-        }
-    }
-
     /// <summary>
     /// Manages the simulated internet. Recieves, holds, and routes messages.
     /// </summary>
@@ -41,6 +17,10 @@ namespace SimulatedInternet
         public List<DetailPackage> Identities { get; set; }
         public List<RawMessage> Messages { get; set; }
         private List<string> Log = new List<string>();
+
+        private ConcurrentQueue<ByteStorage> NetworkMembersLog = new ConcurrentQueue<ByteStorage>();
+
+        private List<ByteStorage> membersLog = new List<ByteStorage>();
 
         public Random random = new Random();
 
@@ -80,8 +60,37 @@ namespace SimulatedInternet
 
                 if (open)
                 {
+                    CheckLogMessages();
+
                     Thread.Sleep(5);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Allows member nodes to submit log information to the network
+        /// </summary>
+        /// <param name="data">Log Information Object</param>
+        public void SendLog(ByteStorage data)
+        {
+            NetworkMembersLog.Enqueue(data);
+        }
+
+        /// <summary>
+        /// Handles the member logs and makes them thread safe accessible
+        /// </summary>
+        public void CheckLogMessages()
+        {   
+            ByteStorage bs = new ByteStorage();
+
+            while(!NetworkMembersLog.IsEmpty)
+            {
+                if(NetworkMembersLog.TryDequeue(out bs))
+                {
+                    membersLog.Add(bs);
+                }
+
+                Thread.Sleep(1);
             }
         }
 
@@ -425,50 +434,5 @@ namespace SimulatedInternet
 
             return false; //failed to send
         }
-    }
-
-    /// <summary>
-    /// Stores information about the ping difference between two members
-    /// </summary>
-    public class ConnectionDetail
-    {
-        public string IP { get; set; }
-        public string DestIP { get; set; }
-        public NetworkMember Member { get; set; }
-        public NetworkMember ConnectedMember { get; set; }
-        public int Ping { get; set; }
-    }
-    /// <summary>
-    /// Stores raw data from a member and destination information
-    /// </summary>
-    public class RawMessage
-    {
-        public NetworkMember Member { get; set; }
-        public byte[] Raw { get; set; }
-        public string IP { get; set; }
-        public ushort Port { get; set; }
-    }
-    /// <summary>
-    ///  Stores raw data during transit while ping is being simulated
-    /// </summary>
-    public class ByteStorage
-    {
-        public DateTime TimeStamp { get; set; }
-        public string DestinationIP { get; set; }
-        public string OriginIP { get; set; }
-        public int Port { get; set; }
-        public int Ping { get; set; }
-        public byte[] Bytes { get; set; }
-        public bool Completed = false;
-    }
-    /// <summary>
-    /// Stores details about a members location and address
-    /// </summary>
-    public class DetailPackage
-    {
-        public NetworkMember Member { get; set; }
-        public string IP { get; set; }
-        public int locationX = 0;
-        public int locationY = 0;
     }
 }
