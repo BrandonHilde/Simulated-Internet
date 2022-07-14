@@ -18,6 +18,7 @@ namespace SimulatedInternet
         public NetworkMember ConnectedMember { get; set; }
         public int Ping { get; set; }
     }
+
     /// <summary>
     /// Stores raw data from a member and destination information
     /// </summary>
@@ -28,6 +29,7 @@ namespace SimulatedInternet
         public string IP { get; set; }
         public ushort Port { get; set; }
     }
+
     /// <summary>
     ///  Stores raw data during transit while ping is being simulated
     /// </summary>
@@ -41,6 +43,7 @@ namespace SimulatedInternet
         public byte[] Bytes { get; set; }
         public bool Completed = false;
     }
+
     /// <summary>
     /// Stores details about a members location and address
     /// </summary>
@@ -50,5 +53,16 @@ namespace SimulatedInternet
         public string IP { get; set; }
         public int locationX = 0;
         public int locationY = 0;
+    }
+
+    /// <summary>
+    /// Allows you to save a network timeline
+    /// </summary>
+    public class NetworkLogSaveState
+    {
+        public List<DetailPackage> Members { get; set; }
+        public List<ByteStorage> Data { get; set; }
+
+        
     }
 }

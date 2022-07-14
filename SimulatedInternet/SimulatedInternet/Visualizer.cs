@@ -8,5 +8,14 @@ namespace SimulatedInternet
 {
     public class Visualizer
     {
+        public virtual void UpdateNetworkMap(List<ByteStorage> data)
+        {
+
+        }
+
+        public virtual object GetNetworkMap()
+        {
+            return null;
+        }
     }
 }

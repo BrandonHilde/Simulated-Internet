@@ -27,6 +27,8 @@ namespace SimulatedInternet
         private bool running = false;
         private bool open = false;
 
+        private int SaveTrigger = 10000;
+
         private object WriteLock = new object();
 
         public InternetManager()
@@ -77,6 +79,15 @@ namespace SimulatedInternet
         }
 
         /// <summary>
+        /// Sets the Log count to save at
+        /// </summary>
+        /// <param name="value"></param>
+        public void SetSaveTrigger(int value)
+        {
+            SaveTrigger = value;
+        }
+
+        /// <summary>
         /// Handles the member logs and makes them thread safe accessible
         /// </summary>
         public void CheckLogMessages()
@@ -91,6 +102,19 @@ namespace SimulatedInternet
                 }
 
                 Thread.Sleep(1);
+            }
+
+            if(membersLog.Count >= SaveTrigger)
+            {
+                NetworkLogSaveState state = new NetworkLogSaveState
+                {
+                    Data = membersLog,
+                    Members = Identities
+                };
+
+                state.Save();
+
+                membersLog.Clear();
             }
         }
 
